@@ -1,1 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arroz de Leche Marle</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fdf5e6">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('arrozdelechemarle.JPG');
+            background-attachment: fixed;
+            background-size: cover;
+            color: #333;
+        }
+        .overlay { background: rgba(255, 255, 255, 0.9); min-height: 100vh; padding: 20px; }
+        header { text-align: center; border-bottom: 2px solid #8b4513; padding-bottom: 10px; }
+        .logo { max-width: 150px; border-radius: 50%; }
+        .info-contacto { font-size: 0.9em; margin-top: 10px; color: #5d2e0a; }
+        
+        .form-section, .product-section { 
+            background: white; border-radius: 10px; padding: 15px; 
+            margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        input, select, textarea { 
+            width: 100%; padding: 10px; margin: 8px 0; 
+            border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;
+        }
+        
+        .producto-card { text-align: center; }
+        .img-producto { width: 100%; max-width: 300px; border-radius: 10px; }
+        .controles { display: flex; justify-content: center; align-items: center; gap: 20px; margin: 15px 0; }
+        .btn-qty { background: #8b4513; color: white; border: none; padding: 10px 20px; border-radius: 5px; font-size: 1.2em; cursor: pointer; }
+        
+        .total-box { background: #e9ecef; padding: 15px; border-radius: 5px; text-align: center; font-weight: bold; }
+        .btn-whatsapp { 
+            background: #25d366; color: white; border: none; width: 100%; 
+            padding: 15px; font-size: 1.1em; font-weight: bold; border-radius: 5px; 
+            cursor: pointer; margin-top: 15px;
+        }
+        footer { text-align: center; font-size: 0.8em; margin-top: 30px; padding: 10px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <header>
+            <img src="arrozdeleche.PNG" alt="Logo" class="logo">
+            <div class="info-contacto">
+                <strong>MARLENY GONZALEZ</strong><br>
+                WhatsApp: 3215049269<br>
+                Caucasia, Antioquia
+            </div>
+        </header>
 
+        <div class="form-section">
+            <input type="text" id="nombre" placeholder="Nombre Completo">
+            <input type="text" id="direccion" placeholder="Dirección">
+            <input type="tel" id="celular" placeholder="Celular">
+            <textarea id="observaciones" placeholder="Observaciones (ej. sin pasas)"></textarea>
+            <select id="pago">
+                <option value="Efectivo">Efectivo</option>
+                <option value="Transferencia">Transferencia (Nequi/Bancolombia)</option>
+            </select>
+            <p id="gps-status" style="font-size: 0.8em; color: green;">📍 Obteniendo ubicación...</p>
+        </div>
+
+        <div class="product-section">
+            <div class="producto-card">
+                <h3>Arroz de Leche Especial</h3>
+                <img src="arrozdelechemarle.JPG" class="img-producto">
+                <p><strong>Precio: $11,000 COP</strong></p>
+                <div class="controles">
+                    <button class="btn-qty" onclick="cambiarCantidad(-1)">-</button>
+                    <span id="cantidad" style="font-size: 1.5em;">1</span>
+                    <button class="btn-qty" onclick="cambiarCantidad(1)">+</button>
+                </div>
+            </div>
+            <div class="total-box">
+                Subtotal: $<span id="subtotal">11000</span><br>
+                TOTAL A PAGAR: $<span id="total">11000</span>
+            </div>
+            <button class="btn-whatsapp" onclick="enviarPedido()">ENVIAR PEDIDO POR WHATSAPP</button>
+        </div>
+
+        <footer>
+            App desarrollada por <strong>Vibras Positivas</strong> &copy; <br>
+            Todos los derechos reservados.
+        </footer>
+    </div>
+
+    <script>
+        let cantidad = 1;
+        const precio = 11000;
+        let coords = "No proporcionada";
+
+        // Obtener GPS
+        navigator.geolocation.getCurrentPosition(
+            (pos) => { coords = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; document.getElementById('gps-status').innerText = "📍 Ubicación capturada correctamente"; },
+            () => { document.getElementById('gps-status').innerText = "❌ No se pudo obtener ubicación"; }
+        );
+
+        function cambiarCantidad(valor) {
+            cantidad = Math.max(1, cantidad + valor);
+            document.getElementById('cantidad').innerText = cantidad;
+            document.getElementById('subtotal').innerText = (cantidad * precio).toLocaleString();
+            document.getElementById('total').innerText = (cantidad * precio).toLocaleString();
+        }
+
+        function enviarPedido() {
+            const nombre = document.getElementById('nombre').value;
+            const direccion = document.getElementById('direccion').value;
+            const celular = document.getElementById('celular').value;
+            const observaciones = document.getElementById('observaciones').value;
+            const pago = document.getElementById('pago').value;
+            const numPedido = Math.floor(Math.random() * 10000);
+            const fecha = new Date().toLocaleString("es-CO", {timeZone: "America/Bogota"});
+
+            if(!nombre || !direccion) return alert("Por favor llena nombre y dirección");
+
+            const mensaje = `*PEDIDO #MARLE-${numPedido}*%0A` +
+                `*Fecha:* ${fecha}%0A%0A` +
+                `*Cliente:* ${nombre}%0A` +
+                `*Dirección:* ${direccion}%0A` +
+                `*Celular:* ${celular}%0A` +
+                `*Ubicación:* ${coords}%0A%0A` +
+                `*PRODUCTO:* Arroz de Leche%0A` +
+                `*Cantidad:* ${cantidad}%0A` +
+                `*Subtotal:* $${(cantidad*precio).toLocaleString()}%0A` +
+                `*Forma de Pago:* ${pago}%0A` +
+                `*Observaciones:* ${observaciones}%0A%0A` +
+                `*TOTAL A PAGAR: $${(cantidad*precio).toLocaleString()}*%0A%0A` +
+                `_Desarrollado por Vibras Positivas_`;
+
+            window.open(`https://wa.me/573215049269?text=${mensaje}`);
+        }
+
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
