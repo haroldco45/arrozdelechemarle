@@ -1,20 +1,23 @@
 {
   "name": "Arroz de Leche Marle",
   "short_name": "MarleApp",
+  "description": "Pedidos de Arroz de Leche Marle en Caucasia",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#8b4513",
   "icons": [
     {
-      "src": "arrozdeleche.PNG",
+      "src": "arrozdelechemarle.PNG",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "arrozdeleche.PNG",
+      "src": "arrozdelechemarle.PNG",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
