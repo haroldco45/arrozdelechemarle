@@ -93,7 +93,6 @@
         let nPedido = localStorage.getItem('consecutivoMarle') || 1;
         document.getElementById('num-pedido-display').innerText = String(nPedido).padStart(4, '0');
 
-        // GPS Corregido (Eliminado el error del 0{ )
         navigator.geolocation.getCurrentPosition(
             (pos) => { 
                 coords = "https://www.google.com/maps?q=" + pos.coords.latitude + "," + pos.coords.longitude;
@@ -122,27 +121,30 @@
                 return alert("Por favor llena los campos obligatorios.");
             }
 
-            // Armado de mensaje ultra-seguro
-            let texto = "*NUEVO PEDIDO #MARLE-" + String(nPedido).padStart(4, '0') + "*%0A" +
-                "--------------------------------%0A" +
-                "*Fecha:* " + fecha + "%0A" +
-                "*Cliente:* " + nombre + "%0A" +
-                "*Dirección:* " + direccion + "%0A" +
-                "*Celular:* " + celular + "%0A" +
-                "*Pago:* " + pago + "%0A" +
-                "*Cantidad:* " + cantidad + "%0A" +
-                "*Notas:* " + observaciones + "%0A" +
-                "*TOTAL:* $" + (cantidad * precio).toLocaleString() + "%0A" +
-                "--------------------------------%0A" +
-                "*UBICACIÓN:* " + coords;
+            // Construcción del mensaje con salto de línea real (\n)
+            let mensajeTexto = `*NUEVO PEDIDO #MARLE-${String(nPedido).padStart(4, '0')}*\n` +
+                `--------------------------------\n` +
+                `*Fecha:* ${fecha}\n` +
+                `*Cliente:* ${nombre}\n` +
+                `*Dirección:* ${direccion}\n` +
+                `*Celular:* ${celular}\n` +
+                `*Pago:* ${pago}\n` +
+                `*Cantidad:* ${cantidad}\n` +
+                `*Notas:* ${observaciones}\n` +
+                `*TOTAL:* $${(cantidad * precio).toLocaleString()}\n` +
+                `--------------------------------\n` +
+                `*UBICACIÓN:* ${coords}\n\n` +
+                `_Pedido enviado desde la App Oficial_`;
+
+            // LA CLAVE: codificar el mensaje para que no se corte
+            const mensajeCodificado = encodeURIComponent(mensajeTexto);
 
             nPedido++;
             localStorage.setItem('consecutivoMarle', nPedido);
             document.getElementById('num-pedido-display').innerText = String(nPedido).padStart(4, '0');
 
-            // URL directa de WhatsApp
-            const url = "https://wa.me/573215049269?text=" + texto;
-            window.location.href = url; // Cambiado a href para mejor compatibilidad en apps
+            const url = "https://wa.me/573215049269?text=" + mensajeCodificado;
+            window.location.href = url;
         }
     </script>
 </body>
