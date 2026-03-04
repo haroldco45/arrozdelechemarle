@@ -14,15 +14,14 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-image: url('arrozdelechemarle.JPG');
             background-attachment: fixed;
             background-size: cover;
             background-position: center;
             color: #333;
         }
-        .overlay { background: rgba(255, 255, 255, 0.92); min-height: 100vh; padding: 15px; box-sizing: border-box; }
+        .overlay { background: rgba(255, 255, 255, 0.94); min-height: 100vh; padding: 15px; box-sizing: border-box; }
         header { text-align: center; border-bottom: 3px solid #8b4513; padding-bottom: 15px; margin-bottom: 10px; }
         .logo { max-width: 120px; border-radius: 50%; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
         .info-contacto { font-size: 0.95em; margin-top: 10px; color: #5d2e0a; line-height: 1.4; }
@@ -34,8 +33,7 @@
         h3 { margin-top: 0; color: #8b4513; border-bottom: 1px solid #eee; padding-bottom: 5px; }
         input, select, textarea { 
             width: 100%; padding: 12px; margin: 8px 0; 
-            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
-            font-size: 16px; /* Evita zoom automático en iPhone */
+            border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px;
         }
         
         .producto-card { text-align: center; }
@@ -48,10 +46,10 @@
 
         .btn-whatsapp { 
             background: #25d366; color: white; border: none; width: 100%; 
-            padding: 16px; font-size: 1.1em; font-weight: bold; border-radius: 8px; 
+            padding: 18px; font-size: 1.1em; font-weight: bold; border-radius: 8px; 
             cursor: pointer; margin-top: 15px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
         }
-        footer { text-align: center; font-size: 0.85em; margin-top: 40px; padding: 20px; color: #555; background: rgba(255,255,255,0.7); border-radius: 10px; }
+        footer { text-align: center; font-size: 0.85em; margin-top: 40px; padding: 20px; color: #555; }
     </style>
 </head>
 <body>
@@ -60,27 +58,26 @@
             <img src="arrozdelechemarle.PNG" alt="Logo" class="logo">
             <div class="info-contacto">
                 <strong>MARLENY GONZALEZ</strong><br>
-                📍 Caucasia, Antioquia<br>
-                WhatsApp: 3215049269
+                📍 Caucasia, Antioquia | 📞 3215049269
             </div>
         </header>
 
         <div class="form-section">
             <h3>Datos de Entrega</h3>
             <input type="text" id="nombre" placeholder="Nombre Completo">
-            <input type="text" id="direccion" placeholder="Dirección de entrega">
+            <input type="text" id="direccion" placeholder="Dirección exacta">
             <input type="tel" id="celular" placeholder="Número de Celular">
-            <textarea id="observaciones" placeholder="¿Alguna nota especial? (Ej: sin pasas)"></textarea>
+            <textarea id="observaciones" placeholder="¿Notas especiales? (ej: sin pasas)"></textarea>
             <select id="pago">
-                <option value="Efectivo">Efectivo (Pago al recibir)</option>
+                <option value="Efectivo">Efectivo</option>
                 <option value="Transferencia">Transferencia (Nequi/Bancolombia)</option>
             </select>
-            <p id="gps-status" style="font-size: 0.85em; color: #8b4513; font-weight: bold; text-align: center;">🛰️ Obteniendo ubicación GPS...</p>
+            <p id="gps-status" style="font-size: 0.85em; color: #8b4513; font-weight: bold; text-align: center;">🛰️ Cargando GPS...</p>
         </div>
 
         <div class="product-section">
             <div class="producto-card">
-                <h3>Nuestro Delicioso Arroz</h3>
+                <h3>Arroz de Leche Marle</h3>
                 <img src="arrozdelechemarle.JPG" class="img-producto">
                 <p style="font-size: 1.2em;"><strong>$11,000 COP</strong></p>
                 <div class="controles">
@@ -90,9 +87,7 @@
                 </div>
             </div>
             <div class="total-box">
-                No. Pedido Actual: <span id="num-pedido-display">0001</span><br>
-                SUBTOTAL: $<span id="subtotal">11,000</span><br>
-                <hr style="border: 0; border-top: 1px solid #ccc;">
+                Pedido #<span id="num-pedido-display">0001</span><br>
                 TOTAL A PAGAR: $<span id="total">11,000</span>
             </div>
             <button class="btn-whatsapp" onclick="enviarPedido()">🚀 ENVIAR PEDIDO POR WHATSAPP</button>
@@ -100,8 +95,7 @@
 
         <footer>
             App desarrollada por <strong>Vibras Positivas</strong> © <br>
-            Derechos de Autor Reservados<br>
-            <small>Caucasia - 2026</small>
+            Derechos Reservados - Caucasia 2026
         </footer>
     </div>
 
@@ -110,19 +104,18 @@
         const precio = 11000;
         let coords = "No compartida";
 
-        // Manejo del consecutivo de pedido
         let nPedido = localStorage.getItem('consecutivoMarle') || 1;
         document.getElementById('num-pedido-display').innerText = String(nPedido).padStart(4, '0');
 
-        // Obtener GPS con alta precisión
+        // GPS Corregido
         navigator.geolocation.getCurrentPosition(
             (pos) => { 
                 coords = `https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude}`; 
-                document.getElementById('gps-status').innerText = "✅ Ubicación GPS lista";
+                document.getElementById('gps-status').innerText = "✅ GPS Listo";
                 document.getElementById('gps-status').style.color = "green";
             },
             () => { 
-                document.getElementById('gps-status').innerText = "⚠️ Activa el GPS para mejor entrega";
+                document.getElementById('gps-status').innerText = "⚠️ GPS no activado";
                 document.getElementById('gps-status').style.color = "orange";
             },
             { enableHighAccuracy: true }
@@ -131,9 +124,7 @@
         function cambiarCantidad(valor) {
             cantidad = Math.max(1, cantidad + valor);
             document.getElementById('cantidad').innerText = cantidad;
-            let subtotal = (cantidad * precio).toLocaleString();
-            document.getElementById('subtotal').innerText = subtotal;
-            document.getElementById('total').innerText = subtotal;
+            document.getElementById('total').innerText = (cantidad * precio).toLocaleString();
         }
 
         function enviarPedido() {
@@ -142,49 +133,40 @@
             const celular = document.getElementById('celular').value;
             const observaciones = document.getElementById('observaciones').value || "Ninguna";
             const pago = document.getElementById('pago').value;
-            
-            // Fecha y hora de Colombia
             const fecha = new Date().toLocaleString("es-CO", {timeZone: "America/Bogota"});
 
             if(!nombre || !direccion || !celular) {
-                return alert("Por favor completa: Nombre, Dirección y Celular");
+                return alert("Por favor completa los campos obligatorios.");
             }
 
-            // Crear el mensaje formateado para WhatsApp
-            const mensaje = 
+            // Mensaje Mejorado para WhatsApp
+            const texto = 
                 `*NUEVO PEDIDO #MARLE-${String(nPedido).padStart(4, '0')}*%0A` +
-                `*------------------------------*%0A` +
-                `📅 *Fecha:* ${fecha}%0A%0A` +
+                `--------------------------------%0A` +
+                `📅 *Fecha:* ${fecha}%0A` +
                 `👤 *Cliente:* ${nombre}%0A` +
                 `🏠 *Dirección:* ${direccion}%0A` +
                 `📞 *Celular:* ${celular}%0A` +
                 `📍 *Ubicación:* ${coords}%0A%0A` +
-                `🍚 *PRODUCTO:* Arroz de Leche Marle%0A` +
+                `🍚 *Producto:* Arroz de Leche Marle%0A` +
                 `🔢 *Cantidad:* ${cantidad}%0A` +
-                `💰 *Subtotal:* $${(cantidad*precio).toLocaleString()}%0A` +
-                `💳 *Forma de Pago:* ${pago}%0A` +
+                `💳 *Pago:* ${pago}%0A` +
                 `📝 *Notas:* ${observaciones}%0A%0A` +
-                `*TOTAL A COBRAR: $${(cantidad*precio).toLocaleString()}*%0A` +
-                `*------------------------------*%0A` +
-                `_App desarrollada por Vibras Positivas_`;
+                `💰 *TOTAL A COBRAR: $${(cantidad*precio).toLocaleString()}*%0A` +
+                `--------------------------------%0A` +
+                `_Pedido enviado desde la App Oficial_`;
 
-            // Incrementar consecutivo
             nPedido++;
             localStorage.setItem('consecutivoMarle', nPedido);
-            document.getElementById('num-pedido-display').innerText = String(nPedido).padStart(4, '0');
-
-            // Abrir WhatsApp
-            window.open(`https://wa.me/573215049269?text=${mensaje}`);
+            
+            // Enlace directo corregido
+            const url = `https://api.whatsapp.com/send?phone=573215049269&text=${texto}`;
+            window.open(url, '_blank');
         }
 
-        // Registro del Service Worker para PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(reg => {
-                    console.log('SW registrado', reg);
-                }).catch(err => {
-                    console.log('Error al registrar SW', err);
-                });
+                navigator.serviceWorker.register('sw.js');
             });
         }
     </script>
