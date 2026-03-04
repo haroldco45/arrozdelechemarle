@@ -1,1 +1,20 @@
-
+{
+  "name": "Arroz de Leche Marle",
+  "short_name": "MarleApp",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#8b4513",
+  "icons": [
+    {
+      "src": "arrozdeleche.PNG",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "arrozdeleche.PNG",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
